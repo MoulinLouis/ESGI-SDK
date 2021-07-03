@@ -10,9 +10,7 @@ abstract class Provider
     protected $redirect_uri;
     protected $scope;
 
-    abstract public function getUser(string $code);
-
-    protected function __construct(string $client_id, string $client_secret, string $redirect_uri, string $scope = null)
+    protected function __construct(string $client_id, string $client_secret, string $redirect_uri, string $scope)
     {
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
@@ -20,7 +18,22 @@ abstract class Provider
         $this->scope = $scope;
     }
 
-    public function getAccessToken(string $code, $is_post = false)
+    /**
+     * Fetch user data from the provider's API
+     *
+     * @param string $code authorization code received from OAuth process
+     * @return array|null
+     */
+    abstract public function getUser(string $code);
+
+    /**
+     * Request the access token with the authorization code received
+     *
+     * @param string $code authorization code
+     * @param bool $is_post POST or GET request
+     * @return array|null
+     */
+    protected function getAccessToken(string $code, bool $is_post = false)
     {
         $context = $is_post ? createStreamContext('POST', ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0']) : null;
         $url = makeUrl($this->access_token_url, [
@@ -34,11 +47,16 @@ abstract class Provider
         return httpRequest($url, $context)['access_token'];
     }
 
-    public function getCodeResponseUrl()
+    /**
+     * Generate link for authentification/authorization
+     *
+     * @return string
+     */
+    public function getAuthorizationUrl()
     {
         return makeUrl($this->auth_url, [
             'response_type' => 'code',
-            'scope' => !empty($this->scope) ? $this->scope : '',
+            'scope' => $this->scope,
             'redirect_uri' => $this->redirect_uri,
             'client_id' => $this->client_id,
         ]);

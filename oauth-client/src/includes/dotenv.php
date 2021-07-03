@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Load .env file
+ *
+ * @param string $path
+ * @throws Exception
+ */
 function loadDotEnv(string $path)
 {
     if (!file_exists($path)) {

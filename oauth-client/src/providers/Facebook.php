@@ -3,7 +3,7 @@
 class Facebook extends Provider
 {
 
-    public function __construct(string $client_id, string $client_secret, string $redirect_uri, string $scope = null)
+    public function __construct(string $client_id, string $client_secret, string $redirect_uri, string $scope = '')
     {
         parent::__construct($client_id, $client_secret, $redirect_uri, $scope);
         $this->access_token_url = URL_FB_ACCESS_TOKEN;

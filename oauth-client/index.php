@@ -163,7 +163,7 @@ function handleResponse(Provider $provider, string $code)
 function displayHome(array $providers)
 {
     foreach ($providers as $provider) {
-        echo displayOAuthLink($provider['instance']->getCodeResponseUrl(), $provider['link_label']);
+        echo displayOAuthLink($provider['instance']->getAuthorizationUrl(), $provider['link_label']);
     }
 }
 
