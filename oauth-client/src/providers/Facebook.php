@@ -14,12 +14,6 @@ class Facebook extends Provider
     public function getUser(string $code)
     {
         $access_token = $this->getAccessToken($code);
-        $context = stream_context_create([
-            'http' => [
-                'method' => "GET",
-                'header' => "Authorization: Bearer " . $access_token
-            ]
-        ]);
-        return $access_token ? httpRequest("{$this->api_url}/me?fields=id,name,email", $context) : null;
+        return $access_token ? httpRequest("{$this->api_url}/me?fields=id,name,email", createStreamContext('GET', "Authorization: Bearer ${access_token}")) : null;
     }
 }

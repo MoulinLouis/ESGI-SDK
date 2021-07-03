@@ -22,14 +22,7 @@ abstract class Provider
 
     public function getAccessToken(string $code, $is_post = false)
     {
-        $context = null;
-        if ($is_post) {
-            $context = stream_context_create(['http' => [
-                'method' => 'POST',
-                'header'  => ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0'],
-            ]]);
-        }
-
+        $context = $is_post ? createStreamContext('POST', ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0']) : null;
         $url = makeUrl($this->access_token_url, [
             'code' => $code,
             'client_id' => $this->client_id,

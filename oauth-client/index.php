@@ -162,8 +162,7 @@ function handleResponse(Provider $provider, string $code)
 
 function displayHome(array $providers)
 {
-    foreach($providers as $provider)
-    {
+    foreach ($providers as $provider) {
         echo displayOAuthLink($provider['instance']->getCodeResponseUrl(), $provider['link_label']);
     }
 }
@@ -193,7 +192,7 @@ function getAllProviders()
         ],
         'google' => [
             'link_label' => "Login with Google",
-            'instance' => new Google(GOOGLE_CLIENT_ID, GOOGLE_SECRET, "${redirect_uri}?provider=google")
+            'instance' => new Google(GOOGLE_CLIENT_ID, GOOGLE_SECRET, "${redirect_uri}?provider=google", 'https://www.googleapis.com/auth/userinfo.profile')
         ],
     ];
 }
