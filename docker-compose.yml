@@ -1,6 +1,6 @@
 services:
   oauth-server:
-    image: php:alpine
+    image: php:8-alpine
     volumes:
       - ./oauth-server:/home/root
     working_dir: /home/root

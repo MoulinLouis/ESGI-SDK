@@ -15,20 +15,13 @@ function dd(...$var)
     die;
 }
 
-function makeUrl(string $url, array $params)
+function makeUrl(string $url, array $params = [])
 {
-    return $url . !empty($params) ? '?' . http_build_query($params) : '';
+    return $url . (!empty($params) ? '?' . http_build_query($params) : '');
 }
 
-function httpRequest(string $url, bool $post = true)
+function httpRequest(string $url, $context = null)
 {
-    $request = curl_init($url);
-    if ($post) {
-        curl_setopt($request, CURLOPT_POST, true);
-    }
-
-    $response = json_decode(curl_exec($request), true);
-    curl_close($request);
-
-    return $response;
+    $response = file_get_contents($url, false, $context);
+    return $response ? json_decode($response, true) : null;
 }

@@ -122,27 +122,78 @@
 // }
 
 
-require 'config/conf.inc.php';
+require 'src/includes/constants.php';
+require 'src/includes/dotenv.php';
+require 'src/helpers/helpers.php';
+require 'src/providers/Provider.php';
+require 'src/providers/Facebook.php';
+require 'src/providers/App.php';
+require 'src/providers/Google.php';
+require 'src/providers/Discord.php';
 
-function handleResponse()
-{
-    echo 'ok';
-}
+loadDotEnv(ENV_PATH);
 
-function displayHome()
-{
-    echo 'HOME';
-}
-
-
+$providers = getAllProviders();
 $route = strtok($_SERVER["REQUEST_URI"], '?');
+
 switch ($route) {
-    case ROUTE_HOME:
-        displayHome();
+    case '/':
+        displayHome($providers);
         break;
-    case ROUTE_RESPONSE:
-        handleResponse();
+    case '/auth':
+        ['code' => $code, 'provider' => $provider] = $_GET;
+        if (!isset($code, $provider)) die('Une erreur est survenue');
+        handleResponse($providers[$provider]['instance'], $code);
         break;
     default:
         http_response_code(404);
+}
+
+function handleResponse(Provider $provider, string $code)
+{
+    if (!$provider) die('Une erreur est survenue : le provider n\'existe pas');
+
+    $data = $provider->getUser($code);
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    die();
+}
+
+function displayHome(array $providers)
+{
+    foreach($providers as $provider)
+    {
+        echo displayOAuthLink($provider['instance']->getCodeResponseUrl(), $provider['link_label']);
+    }
+}
+
+function displayOAuthLink(string $link, string $label, array $options = [])
+{
+    $html = "<p><a href=${link}>${label}</a></p>";
+
+    return $html;
+}
+
+function getAllProviders()
+{
+    $redirect_uri = 'https://localhost/auth';
+    return [
+        'facebook' => [
+            'link_label' => "Login with Facebook",
+            'instance' => new Facebook(FB_CLIENT_ID, FB_SECRET, "${redirect_uri}?provider=facebook")
+        ],
+        'app' => [
+            'link_label' => "Login with App",
+            'instance' => new App(APP_CLIENT_ID, APP_SECRET, "${redirect_uri}?provider=app")
+        ],
+        'discord' => [
+            'link_label' => "Login with Discord",
+            'instance' => new Discord(DISCORD_CLIENT_ID, DISCORD_SECRET, "${redirect_uri}?provider=discord")
+        ],
+        'google' => [
+            'link_label' => "Login with Google",
+            'instance' => new Google(GOOGLE_CLIENT_ID, GOOGLE_SECRET, "${redirect_uri}?provider=google")
+        ],
+    ];
 }
