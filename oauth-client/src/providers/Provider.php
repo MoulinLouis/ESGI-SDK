@@ -17,6 +17,8 @@ abstract class Provider
         $this->scope = $scope;
     }
 
+    abstract public function getUser();
+
     protected function setAccessToken(string $url_access_token)
     {
         $this->url_access_token = $url_access_token;
@@ -33,14 +35,13 @@ abstract class Provider
         if($this->url_access_token) {
             $url = makeUrl($this->url_access_token, [
                 'client_id' => $this->client_id,
-                'client_secret' => $this->client_id,
+                'client_secret' => $this->client_secret,
+                'redirect_uri' => $this->redirect_uri,
                 'code' => $code,
-                'redirect_uri' => $this->client_id,
                 'grant_type' => 'authorization_code',
             ]);
         }
 
         return $url ? request($url)['access_token'] : null;
     }
-
 }
