@@ -31,7 +31,7 @@ function makeUrl(string $url, array $params = [])
  * Perform a HTTP Request
  *
  * @param string $url
- * @param string|array $context using stream_context_create function
+ * @param resource|null $context using stream_context_create function
  * @return array|null
  */
 function httpRequest(string $url, $context = null)
@@ -42,7 +42,7 @@ function httpRequest(string $url, $context = null)
 
 /**
  * @param string $method
- * @param $header
+ * @param string|array $header
  * @return resource
  */
 function createStreamContext(string $method, $header)

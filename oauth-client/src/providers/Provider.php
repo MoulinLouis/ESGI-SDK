@@ -2,29 +2,33 @@
 
 abstract class Provider
 {
-    protected $client_id;
-    protected $client_secret;
-    protected $auth_url;
-    protected $api_url;
-    protected $access_token_url;
-    protected $redirect_uri;
-    protected $scope;
+    protected string $client_id;
+    protected string $client_secret;
+    protected string $auth_url;
+    protected string $api_url;
+    protected string $access_token_url;
+    protected string $redirect_uri;
+    protected array $options;
 
-    protected function __construct(string $client_id, string $client_secret, string $redirect_uri, string $scope)
+    protected function __construct(string $client_id, string $client_secret, string $redirect_uri, array $options)
     {
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
         $this->redirect_uri = $redirect_uri;
-        $this->scope = $scope;
+        $this->options = $options;
     }
 
     /**
      * Fetch user data from the provider's API
      *
      * @param string $code authorization code received from OAuth process
-     * @return array|null
+     * @return array|false
      */
-    abstract public function getUser(string $code);
+    public function getUser(string $code)
+    {
+        $access_token = $this->getAccessToken($code);
+        return $access_token ? httpRequest($this->api_url, createStreamContext('GET', "Authorization: Bearer ${access_token}")) : false;
+    }
 
     /**
      * Request the access token with the authorization code received
@@ -54,11 +58,10 @@ abstract class Provider
      */
     public function getAuthorizationUrl()
     {
-        return makeUrl($this->auth_url, [
+        return makeUrl($this->auth_url, array_merge([
             'response_type' => 'code',
-            'scope' => $this->scope,
             'redirect_uri' => $this->redirect_uri,
             'client_id' => $this->client_id,
-        ]);
+        ], $this->options));
     }
 }

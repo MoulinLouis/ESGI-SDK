@@ -75,7 +75,7 @@ function register()
 function auth()
 {
     // Check clientID
-    ["client_id" => $clientId, "scope" => $scope, "state" => $state] = $_GET;
+    ["client_id" => $clientId, "redirect_uri" => $redirectUri, "scope" => $scope, "state" => $state] = $_GET;
 
     $app = findApp(["client_id" => $clientId]);
     if (!$app) throw new InvalidArgumentException("{$clientId} not exists");
@@ -84,13 +84,13 @@ function auth()
 
     // Generate page
     echo "{$app['name']} - {$scope}<br>";
-    echo "<a href=\"/auth-Oui?client_id={$clientId}&state={$state}\">Oui</a>&nbsp;";
-    echo "<a href=\"/auth-Non?client_id={$clientId}&state={$state}\">Non</a>";
+    echo "<a href=\"/auth-Oui?client_id={$clientId}&redirect_uri={$redirectUri}&state={$state}\">Oui</a>&nbsp;";
+    echo "<a href=\"/auth-Non?client_id={$clientId}&redirect_uri={$redirectUri}&state={$state}\">Non</a>";
 }
 
 function handleAuth($success)
 {
-    ["client_id" => $clientId, "state" => $state] = $_GET;
+    ["client_id" => $clientId, "redirect_uri" => $redirectUri, "state" => $state] = $_GET;
     // Get app
     $app = findApp(["client_id" => $clientId]);
     if (!$app) throw new InvalidArgumentException("{$clientId} not exists");
@@ -111,17 +111,13 @@ function handleAuth($success)
             "expiredIn" => (new \DateTimeImmutable())->modify("+5 minutes")
         ];
         write_file($codes, './data/code.data');
-
         $queryParams['code'] = $code;
-        $url = $app["redirect_success"];
     } else {
-        $url = $app["redirect_error"];
+        $queryParams = ['error' => 'error'];
     }
 
-    // Redirect vers
-    //      success => redirect_success
-    //      error => redirect_error
-    header("Location: {$url}?" . http_build_query($queryParams));
+    $url = $redirectUri ?? $app['redirect_uri'];
+    header("Location: {$url}" . (str_contains($url, '?') ? '&' : '?') . http_build_query($queryParams));
 }
 
 function handleAuthCode()

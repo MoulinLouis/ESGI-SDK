@@ -1,2 +1,1 @@
-a:6:{s:4:"name";s:4:"Test";s:3:"uri";s:21:"http://localhost:8082";s:16:"redirect_success";s:34:"http://localhost:8082/auth-success";s:14:"redirect_error";s:32:"http://localhost:8082/auth-error";s:9:"client_id";s:30:"client_6070546c6aba63.16480463";s:13:"client_secret";s:40:"38201ad253c323a79d9108f4588bbc62d2e1a5c6";}
-a:2:{s:9:"client_id";s:30:"client_60db133bb38329.63767794";s:13:"client_secret";s:40:"3fe5ec63a548e51a9916484efc75addd2028978a";}
+a:4:{s:4:"name";s:11:"client_test";s:12:"redirect_uri";s:35:"https://localhost/auth?provider=app";s:9:"client_id";s:30:"client_60e0f6386ed629.76065327";s:13:"client_secret";s:40:"d288a9a9cc9336f9bcee7ba89fb7f1485b5b9e24";}
