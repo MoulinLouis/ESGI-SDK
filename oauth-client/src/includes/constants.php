@@ -14,6 +14,6 @@ const URL_GOOGLE_AUTH = 'https://accounts.google.com/o/oauth2/v2/auth';
 const URL_GOOGLE_ACCESS_TOKEN = 'https://oauth2.googleapis.com/token';
 const URL_GOOGLE_API = 'https://www.googleapis.com/oauth2/v1/userinfo';
 
-const URL_GITHUB_AUTH = '';
-const URL_GITHUB_ACCESS_TOKEN = '';
-const URL_GITHUB_API = '';
+const URL_GITHUB_AUTH = 'https://github.com/login/oauth/authorize';
+const URL_GITHUB_ACCESS_TOKEN = 'https://github.com/login/oauth/access_token';
+const URL_GITHUB_API = 'https://api.github.com/user';
