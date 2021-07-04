@@ -11,26 +11,6 @@ class Github extends Provider
         $this->api_url = URL_GITHUB_API;
     }
 
-    /**
-     * Request the access token with the authorization code received
-     *
-     * @param string $code authorization code
-     * @param bool $is_post POST or GET request
-     * @return array|null
-     */
-    protected function getAccessToken(string $code, bool $is_post = false)
-    {
-        $context = $is_post ? createStreamContext('POST', ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0']) : null;
-        $params = [
-            'code' => $code,
-            'client_id' => $this->client_id,
-            'client_secret' => $this->client_secret,
-            'redirect_uri' => $this->redirect_uri
-        ];
-        $url = makeUrl($this->access_token_url, $params);
-        return httpRequestCurl($url)["access_token"];
-    }
-
     public function getUser(string $code)
     {
         $access_token = $this->getAccessToken($code, true);

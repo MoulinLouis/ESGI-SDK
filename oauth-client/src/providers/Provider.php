@@ -39,7 +39,7 @@ abstract class Provider
      */
     protected function getAccessToken(string $code, bool $is_post = false)
     {
-        $context = $is_post ? createStreamContext('POST', ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0']) : null;
+        $context = $is_post ? createStreamContext('POST', ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0', 'Accept: application/json']) : null;
         $url = makeUrl($this->access_token_url, [
             'code' => $code,
             'client_id' => $this->client_id,
