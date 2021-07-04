@@ -1,21 +1,15 @@
+### Register a new client 
+### ('redirect_uri' param is registered as the default one; It is used only when redirect_uri is not provided in the oauth process)
 POST http://localhost:8081/register
 Content-Type: application/x-www-form-urlencoded
 
-name=Test
-&uri=http://localhost:8082
-&redirect_success=http://localhost:8082/auth-success
-&redirect_error=http://localhost:8082/auth-error
+name=client_test&redirect_uri=https://localhost/auth?provider=app
 
-###
-GET http://localhost:8081/auth?response_type=code&client_id=client_6070546c6aba63.16480463&scope=basic&state=zaclenakvcneakonve
+### Authorization interface
+GET http://localhost:8081/auth?response_type=code&client_id=client_60e0f6386ed629.76065327&scope=profile&state=random
 
-###
-GET http://localhost:8081/auth-Oui?client_id=client_6070546c6aba63.16480463&state=zaclenakvcneakonve
+### Request authorization code
+GET http://localhost:8081/auth-Oui?client_id=client_60e0f6386ed629.76065327&state=random
 
-###
-GET http://localhost:8081/token?grant_type=authorization_code&client_id=client_6070546c6aba63.16480463&client_secret=38201ad253c323a79d9108f4588bbc62d2e1a5c6&code=60a2a11327070
-
-###
-GET http://localhost:8081/token?grant_type=password&client_id=client_6070546c6aba63.16480463&client_secret=38201ad253c323a79d9108f4588bbc62d2e1a5c6&username=60a2a11327070&password=60a2a11327070
-###
-GET http://localhost:8081/token?grant_type=client_credentials&client_id=client_6070546c6aba63.16480463&client_secret=38201ad253c323a79d9108f4588bbc62d2e1a5c6
+### Request token authorization code
+GET http://localhost:8081/token?grant_type=authorization_code&code=XXXXXX&client_id=client_60e0f6386ed629.76065327&client_secret=d288a9a9cc9336f9bcee7ba89fb7f1485b5b9e24

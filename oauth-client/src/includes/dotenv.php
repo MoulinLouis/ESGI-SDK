@@ -4,15 +4,13 @@
  * Load .env file
  *
  * @param string $path
- * @throws Exception
  */
 function loadDotEnv(string $path)
 {
-    if (!file_exists($path)) {
-        throw new Exception('Impossible de charger les variables d\'envionnements : le fichier ' . $path . ' n\'existe pas');
-    }
+    if (!file_exists($path)) die("Impossible de charger les variables d\'environnements : le fichier ${path} n\'existe pas");
 
-    if (empty($env = fopen($path, 'r'))) return;
+    $env = fopen($path, 'r');
+    if (empty($env)) die("Impossible d'ouvrir ${path} : le fichier est vide ou n'est pas accessible");
 
     while (!feof($env)) {
         $line = trim(fgets($env));
