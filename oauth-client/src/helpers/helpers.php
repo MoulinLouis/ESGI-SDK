@@ -42,15 +42,15 @@ function httpRequest(string $url, $context = null)
 
 /**
  * @param string $method
- * @param string|array $header
+ * @param string|array $headers
  * @return resource
  */
-function createStreamContext(string $method, array $header)
+function createStreamContext(string $method, $headers)
 {
     return stream_context_create([
         'http' => [
             'method' => $method,
-            'header' => $header
+            'header' => $headers
         ]
     ]);
 }

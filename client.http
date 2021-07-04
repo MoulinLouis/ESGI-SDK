@@ -11,5 +11,5 @@ GET http://localhost:8081/auth?response_type=code&client_id=client_60e0f6386ed62
 ### Request authorization code
 GET http://localhost:8081/auth-Oui?client_id=client_60e0f6386ed629.76065327&state=random
 
-### Request token authorization code
+### Request token from the authorization code received
 GET http://localhost:8081/token?grant_type=authorization_code&code=XXXXXX&client_id=client_60e0f6386ed629.76065327&client_secret=d288a9a9cc9336f9bcee7ba89fb7f1485b5b9e24
