@@ -40,12 +40,23 @@ function httpRequest(string $url, $context = null)
     return $response ? json_decode($response, true) : null;
 }
 
+function httpRequestCurl($url) {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+    $headers[] = 'Accept: application/json';
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+    $response = curl_exec($ch);
+    return json_decode($response, true);
+}
+
 /**
  * @param string $method
  * @param string|array $header
  * @return resource
  */
-function createStreamContext(string $method, $header)
+function createStreamContext(string $method, array $header)
 {
     return stream_context_create([
         'http' => [
