@@ -46,7 +46,7 @@ function getAllProviders()
         ],
         'github' => [
             'link_label' => 'Login with Github',
-            'instance' => new Github(GITHUB_CLIENT_ID, GITHUB_SECRET, "${redirect_uri}?provider=github")
+            'instance' => new Github(GITHUB_CLIENT_ID, GITHUB_SECRET, "${redirect_uri}?provider=github", [], GITHUB_APP)
         ],
         'google' => [
             'link_label' => 'Login with Google',
