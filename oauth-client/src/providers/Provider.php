@@ -8,14 +8,16 @@ abstract class Provider
     protected string $api_url;
     protected string $access_token_url;
     protected string $redirect_uri;
+    protected string $app_name;
     protected array $options;
 
-    protected function __construct(string $client_id, string $client_secret, string $redirect_uri, array $options)
+    protected function __construct(string $client_id, string $client_secret, string $redirect_uri, array $options, string $app_name = "")
     {
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
         $this->redirect_uri = $redirect_uri;
         $this->options = $options;
+        $this->app_name = $app_name;
     }
 
     /**

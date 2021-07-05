@@ -3,9 +3,9 @@
 class Github extends Provider
 {
 
-    public function __construct(string $client_id, string $client_secret, string $redirect_uri, array $options = [])
+    public function __construct(string $client_id, string $client_secret, string $redirect_uri, array $options = [], string $app_name = "")
     {
-        parent::__construct($client_id, $client_secret, $redirect_uri, $options);
+        parent::__construct($client_id, $client_secret, $redirect_uri, $options, $app_name);
         $this->access_token_url = URL_GITHUB_ACCESS_TOKEN;
         $this->auth_url = URL_GITHUB_AUTH;
         $this->api_url = URL_GITHUB_API;
@@ -14,6 +14,6 @@ class Github extends Provider
     public function getUser(string $code)
     {
         $access_token = $this->getAccessToken($code, true);
-        return $access_token ? httpRequest($this->api_url, createStreamContext('GET', ["Authorization: Bearer ${access_token}", "User-Agent: esgi-sdk"])) : false;
+        return $access_token ? httpRequest($this->api_url, createStreamContext('GET', ["Authorization: Bearer ${access_token}", "User-Agent: $this->app_name"])) : false;
     }
 }
