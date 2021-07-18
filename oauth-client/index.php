@@ -12,8 +12,13 @@ require 'src/providers/Github.php';
 function handleResponse(Provider $provider, array $request)
 {
     if (!$request['code']) die('Accès refusé');
-
     $data = $provider->getUser($request['code']);
+    if($_GET['provider'] !== 'app') {
+        echo "
+        Bonjour {$data['name']}, vous vous êtes bien connecté à l'api {$_GET['provider']}.<br>
+        Votre adresse mail est la suivante : {$data['email']} et votre id est {$data['id']}
+    ";
+    }
     dd($data);
 }
 

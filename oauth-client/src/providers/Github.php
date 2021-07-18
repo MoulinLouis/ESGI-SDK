@@ -14,6 +14,11 @@ class Github extends Provider
     public function getUser(string $code)
     {
         $access_token = $this->getAccessToken($code, true);
-        return $access_token ? httpRequest($this->api_url, createStreamContext('GET', ["Authorization: Bearer ${access_token}", "User-Agent: $this->app_name"])) : false;
+        $result = $access_token ? httpRequest($this->api_url, createStreamContext('GET', ["Authorization: Bearer ${access_token}", "User-Agent: $this->app_name"])) : false;
+        return [
+            'id' => $result['id'],
+            'name' => $result['login'],
+            'email' => $result['email']
+        ];
     }
 }
