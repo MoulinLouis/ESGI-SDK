@@ -12,14 +12,22 @@ require 'src/providers/Github.php';
 function handleResponse(Provider $provider, array $request)
 {
     if (!$request['code']) die('Accès refusé');
+
     $data = $provider->getUser($request['code']);
-    if($_GET['provider'] !== 'app') {
-        echo "
-        Bonjour {$data['name']}, vous vous êtes bien connecté à l'api {$_GET['provider']}.<br>
+
+    if ($data['error']) die("Votre token d'accès n'est pas valide ou l'URL est inaccessible");
+
+    if ($provider instanceof App) {
+        echo "Vous êtes bien connecté au serveur de Karl avec l'id {$data['userId']}";
+        exit;
+    }
+
+    echo "
+        Bonjour {$data['name']}, vous êtes bien connecté à votre compte " . ucfirst($request['provider']) . "<br>
         Votre adresse mail est la suivante : {$data['email']} et votre id est {$data['id']}
     ";
-    }
-    dd($data);
+
+    // dd($data);
 }
 
 function displayHome(array $providers)

@@ -55,7 +55,7 @@ function register()
 {
     ["name" => $name] = $_POST;
 
-    if (findApp(["name" => $name])) throw new InvalidArgumentException("{$name} already registered");
+    if (findApp(["name" => $name])) sendError('Duplicate name', "{$name} already registered");
 
     $clientID = uniqid('client_', true);
     $clientSecret = sha1($clientID);
@@ -124,8 +124,8 @@ function handleAuthCode()
 {
     ["client_id" => $clientId, "code" => $code] = $_GET;
     // Get Code
-    if (!($code = findCode(["code" => $code, "client_id" => $clientId]))) throw new InvalidArgumentException("{$code} not valid for app {$clientId}");
-    if ($code["expiredIn"] < new DateTimeImmutable()) throw new InvalidArgumentException("{$code['code']} is expired");
+    if (!($code = findCode(["code" => $code, "client_id" => $clientId]))) sendError('Invalid code', "{$code} not valid for app {$clientId}");
+    if ($code["expiredIn"] < new DateTimeImmutable()) sendError('Expired code', "{$code['code']} is expired");
 
     return uniqid();
 }
@@ -141,7 +141,7 @@ function token()
 {
     ["grant_type" => $grantType, "client_id" => $clientId, "client_secret" => $clientSecret] = $_GET;
     // Get app
-    if (!findApp(["client_id" => $clientId, "client_secret" => $clientSecret])) throw new InvalidArgumentException("Client credentials not valid");
+    if (!findApp(["client_id" => $clientId, "client_secret" => $clientSecret])) sendError('Invalid credentials', 'Client credentials not valid');
 
     //$userId = null;
     //switch($grantType) {
@@ -181,12 +181,20 @@ function token()
 function me()
 {
     $authHeader = getallheaders()["Authorization"] ?? '';
-    if (!str_starts_with($authHeader, "Bearer ")) throw new \HttpRequestException("Not authorized");
+    if (!str_starts_with($authHeader, "Bearer ")) sendError('Invalid headers', 'Not authorized');
     $token = str_replace('Bearer ', '', $authHeader);
-    if (null == ($tokenEntity = findToken(['token' => $token]))) throw new \HttpRequestException("Not authorized");
+    if (null == ($tokenEntity = findToken(['token' => $token]))) sendError('Invalid token', 'Not authorized');
     echo json_encode([
         "userId" => $tokenEntity["user_id"]
     ]);
+}
+
+function sendError(string $error, string $description)
+{
+    header_remove();
+    header('Content-Type: application/json');
+    echo json_encode(['error' => $error, 'error_description' => $description]);
+    exit;
 }
 
 $route = strtok($_SERVER["REQUEST_URI"], '?');

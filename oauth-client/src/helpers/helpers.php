@@ -32,12 +32,14 @@ function makeUrl(string $url, array $params = [])
  *
  * @param string $url
  * @param resource|null $context using stream_context_create function
- * @return array|null
+ * @return array
  */
 function httpRequest(string $url, $context = null)
 {
-    $response = file_get_contents($url, false, $context);
-    return $response ? json_decode($response, true) : null;
+    $response = @file_get_contents($url, false, $context);
+    return $response
+        ? json_decode($response, true)
+        : ['error' => true];
 }
 
 /**

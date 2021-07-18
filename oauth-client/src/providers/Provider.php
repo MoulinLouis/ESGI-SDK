@@ -50,7 +50,10 @@ abstract class Provider
             'grant_type' => 'authorization_code',
         ]);
 
-        return httpRequest($url, $context)['access_token'];
+        $res = httpRequest($url, $context);
+        if ($res['error']) die($res['error_description'] ?? 'Error response from OAuth server : Your credentials are invalid or expired');
+
+        return $res['access_token'];
     }
 
     /**
