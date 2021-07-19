@@ -61,7 +61,7 @@ function getAllProviders()
         ],
         'google' => [
             'link_label' => 'Login with Google',
-            'instance' => new Google(GOOGLE_CLIENT_ID, GOOGLE_SECRET, "${redirect_uri}?provider=google", ['scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'])
+            'instance' => new Google(GOOGLE_CLIENT_ID, GOOGLE_SECRET, "${redirect_uri}?provider=google", ['scope' => 'https://www.googleapis.com/auth/userinfo.profile  https://www.googleapis.com/auth/userinfo.email'])
         ],
     ];
 }
