@@ -14,7 +14,9 @@ class Github extends Provider
     public function getUser(string $code)
     {
         $access_token = $this->getAccessToken($code, true);
-        $result = $access_token ? httpRequest($this->api_url, createStreamContext('GET', ["Authorization: Bearer ${access_token}", "User-Agent: $this->app_name"])) : false;
+        $result = httpRequest($this->api_url, createStreamContext('GET', ["Authorization: Bearer ${access_token}", "User-Agent: $this->app_name"]));
+        if ($result['error']) die("Votre token d'accès n'est pas valide ou l'URL est inaccessible");
+
         return [
             'id' => $result['id'],
             'name' => $result['login'],

@@ -15,8 +15,6 @@ function handleResponse(Provider $provider, array $request)
 
     $data = $provider->getUser($request['code']);
 
-    if ($data['error']) die("Votre token d'accès n'est pas valide ou l'URL est inaccessible");
-
     if ($provider instanceof App) {
         echo "Vous êtes bien connecté au serveur de Karl avec l'id {$data['userId']}";
         exit;
